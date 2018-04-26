@@ -1,7 +1,6 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="es">
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -73,12 +72,13 @@
 
 					<!-- Search -->
 					<div class="header-search">
-						<form>
-							<input class="input search-input" type="text" placeholder="Enter your keyword">
-							<select class="input search-categories">
+						<form method="get" action="">
+							{% csrf_token %}
+							<input class="input search-input" type="text" name="q" placeholder="Enter your keyword">
+							<select class="input search-categories" name="category">
 								<option value="0">All Categories</option>
-								<option value="1">Category 01</option>
-								<option value="1">Category 02</option>
+								<option value="1">Supply</option>
+								<option value="2">Expert parts</option>
 							</select>
 							<button class="search-btn"><i class="fa fa-search"></i></button>
 						</form>
@@ -93,9 +93,9 @@
 								<div class="header-btns-icon">
 									<i class="fa fa-user-o"></i>
 								</div>
-								<strong class="text-uppercase">My Account </strong>
+								<strong class="text-uppercase">{{ user.username }}</strong>
 							</div>
-							<a href="#" class="text-uppercase">Log Out</a>		
+							<a href="{% url 'toolcrib:logout' %}" class="text-uppercase">Log Out</a>		
 						</li>
 						<!-- /Account -->
 
@@ -129,16 +129,9 @@
 	<!-- section -->
 	<div class="section">
 		<!-- container -->
-		<div class="container">
-			<!-- row -->
-			<div class="row">				
-				<!-- MAIN -->
-				<div id="main" class="col-md-12">
-
-				</div>
-				<!-- /MAIN -->
-			</div>
-			<!-- /row -->
+		<div class="container">			
+			{% block 'main' %}
+			{% endblock %}				
 		</div>
 		<!-- /container -->
 	</div>
