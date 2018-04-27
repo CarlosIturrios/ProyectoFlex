@@ -33,37 +33,44 @@ class Part(models.Model):
 		return self.num_part
 
 
-class Order(models.Model):
-	date_order = models.DateTimeField(null=True, blank=True)
+class Order(models.Model):	
 	status = models.CharField(
 		max_length = 1, blank=False, default='1', choices =(
-			('1','PENDIENTE'),
-			('2','APROBADO'),
-			('3','CANCELADO'),
-			('4','REALIZADO')
+			('1','Pennding'),
+			('2','Approved'),
+			('3','Canceled'),
+			('4','Done'),
 		)
 	)
 	level = models.CharField(
 		max_length = 1, blank=False, default='1', choices =(
-			('1','NORMAL'),
-			('2','NO ES URGENTE'),
-			('3','URGENTE')
+			('1','Not Urgent'),
+			('2','Regular'),
+			('3','Urgent'),
 		)
 	)
+	
 	cost_center = models.CharField(max_length=100, null=False, blank=False)
 	comments = models.CharField(max_length=200, null=True, blank=True)
-	user = models.ForeignKey(User, unique=False)
-	supervisor = models.ForeignKey(User, unique=False)
+	
+	user = models.ForeignKey(
+		User, null=False, blank=False, related_name='order_set', on_delete=models.PROTECT
+	)
+	supervisor = models.ForeignKey(
+		User, null=False, blank=False, related_name='superviced_order_set', on_delete=models.PROTECT
+	)
+		
+	date_order = models.DateTimeField(null=False, blank=False, auto_now_add=True)
 	date_done = models.DateTimeField(null=True, blank=True)
 
 	def __str__(self):
-		return self.status
+		return 'Order N: {0} Status: {1}'.format(self.id, self.get_status_display())
 
 
-class Order_Details(models.Model):
-	order = models.ForeignKey(Order, on_delete=models.CASCADE)
-	num_part = models.ForeignKey(Part, on_delete=models.CASCADE)
+class OrderDetail(models.Model):
+	order = models.ForeignKey(Order, null=False, blank=False, related_name='order_detail_set', on_delete=models.CASCADE)
+	part = models.ForeignKey(Part, null=False, blank=False, related_name='part_detail_set', on_delete=models.PROTECT)
 	quantity = models.PositiveIntegerField(null=False, blank=False)
 	
 	def __str__(self):
-		return self.order
+		return 'Part N. {0} Cant: {1}'.format(self.part.num_part, self.quantity)
