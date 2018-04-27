@@ -11,4 +11,10 @@ urlpatterns = [
 
     # App views
     url('', views.principal, name='principal'),
+   	url(r'ordersmanager/$', views.ordersmanager, name='ordersmanager'),
+ 	url(r'orderssupervisor/$', views.orderssupervisor, name='orderssupervisor'),  
+ 	url(r'updateproduct/$', views.updateproduct, name='updateproduct'),	
+ 	url(r'updateuser/$', views.updateuser, name='updateuser'),
+ 	url(r'products/$', views.products, name='products'),
+
 ]
