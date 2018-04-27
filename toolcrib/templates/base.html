@@ -48,8 +48,8 @@
 				</div>
 				<div class="pull-right">
 					<ul class="header-top-links">
-						<li><a class="fa fa-tasks" href=" {% if user.groups == 'supervisor' %} 
-								{% url 'toolcrib:ordersupervisor'%}
+						<li><a class="fa fa-tasks" href=" {% if user.Groups == 'Supervisor' %} 
+								{% url 'toolcrib:orderssupervisor'%}
 								{% else %}
 									{% url 'toolcrib:ordersmanager' %}
 							{% endif %}"
@@ -98,7 +98,7 @@
 								<div class="header-btns-icon">
 									<i class="fa fa-user-o"></i>
 								</div>
-								<strong class="text-uppercase">{{ user.username }}</strong>
+								<strong class="text-uppercase">{{ user.last_name }}</strong>
 							</div>
 							<a href="{% url 'toolcrib:logout' %}" class="text-uppercase">Log Out</a>		
 						</li>
