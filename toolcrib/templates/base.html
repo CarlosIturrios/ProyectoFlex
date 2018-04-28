@@ -48,15 +48,14 @@
 				</div>
 				<div class="pull-right">
 					<ul class="header-top-links">
-						<li><a class="fa fa-tasks" href=" {% if user.Groups == 'Supervisor' %} 
-								{% url 'toolcrib:orderssupervisor'%}
-								{% else %}
-									{% url 'toolcrib:ordersmanager' %}
-							{% endif %}"
-							> Orders</a></li>
 						<li><a class="fa fa-list-ul" href="#"> Products</a></li>
-						<li><a class="fa fa-users" href="#"> Update User</a></li>
-						<li><a class="fa fa-gears" href="#"> Update Tool</a></li>
+						{% if user.groups.last.name == 'Supervisor' %}
+							<li><a class="fa fa-tasks" href="{% url 'toolcrib:orderssupervisor'%}"> Orders</a></li>
+						{% elif user.groups.last.name == 'Manager'  %}
+							<li><a class="fa fa-tasks" href="{% url 'toolcrib:ordersmanager' %}"> Orders</a></li>
+							<li><a class="fa fa-users" href="#"> Update User</a></li>
+							<li><a class="fa fa-gears" href="#"> Update Tool</a></li>
+						{% endif %}
 					</ul>
 				</div>
 			</div>
@@ -69,7 +68,7 @@
 				<div class="pull-left">
 					<!-- Logo -->
 					<div class="header-logo">
-						<a class="logo" href="#">
+						<a class="logo" href="{% url 'toolcrib:principal' %}">
 							<img src="{% static 'img/Flex_logo15_opt.png' %}" alt="">
 						</a>
 					</div>
@@ -100,6 +99,7 @@
 								</div>
 								<strong class="text-uppercase">{{ user.last_name }}</strong>
 							</div>
+							<strong>{{ user.groups.last.name }} </strong>
 							<a href="{% url 'toolcrib:logout' %}" class="text-uppercase">Log Out</a>		
 						</li>
 						<!-- /Account -->
