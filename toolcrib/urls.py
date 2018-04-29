@@ -16,4 +16,7 @@ urlpatterns = [
  	url(r'^updateproduct/$', views.updateproduct, name='updateproduct'),	
  	url(r'^updateuser/$', views.updateuser, name='updateuser'),
  	url(r'^products/$', views.products, name='products'),
+ 	url(r'^shopingcart/$', views.shopingcart, name='shopingcart'),
+ 	url(r'^ordersmanagercart/$', views.ordersmanagercart, name='ordersmanagercart'),
+ 	url(r'^orderssupervisorcart/$', views.orderssupervisorcart, name='orderssupervisorcart'),
 ]

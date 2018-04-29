@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required, permission_required
+
+from .models import Part
 
 # Create your views here.
 @login_required()
@@ -32,4 +35,19 @@ def updateuser(request):
 
 @login_required()
 def products(request):
-	return render(request, 'products.html')
+	parts = Part.objects.all()
+	return render(request, 'products.html', {'parts' : parts})
+
+
+@login_required()
+def shopingcart(request):
+	return render(request, 'shopingcart.html')
+
+@login_required()
+def ordersmanagercart(request):
+	return render(request, 'ordersmanagercart.html')
+
+
+@login_required()
+def orderssupervisorcart(request):
+	return render(request, 'orderssupervisorcart.html')

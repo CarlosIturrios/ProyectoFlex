@@ -48,13 +48,13 @@
 				</div>
 				<div class="pull-right">
 					<ul class="header-top-links">
-						<li><a class="fa fa-list-ul" href="#"> Products</a></li>
+						<li><a class="fa fa-list-ul" href="{% url 'toolcrib:products' %}"> Products</a></li>
 						{% if user.groups.last.name == 'Supervisor' %}
 							<li><a class="fa fa-tasks" href="{% url 'toolcrib:orderssupervisor'%}"> Orders</a></li>
 						{% elif user.groups.last.name == 'Manager'  %}
 							<li><a class="fa fa-tasks" href="{% url 'toolcrib:ordersmanager' %}"> Orders</a></li>
-							<li><a class="fa fa-users" href="#"> Update User</a></li>
-							<li><a class="fa fa-gears" href="#"> Update Tool</a></li>
+							<li><a class="fa fa-users" href="{% url 'toolcrib:updateuser' %}"> Update User</a></li>
+							<li><a class="fa fa-gears" href="{% url 'toolcrib:updateproduct' %}"> Update Tool</a></li>
 						{% endif %}
 					</ul>
 				</div>
