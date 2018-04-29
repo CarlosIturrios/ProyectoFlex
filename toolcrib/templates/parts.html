@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block 'main' %}
 
 
@@ -23,22 +24,14 @@
 							<div class="col-md-4 col-sm-6 col-xs-6">
 								<div class="product product-single">
 									<div class="product-thumb">
-										<button class="main-btn quick-view"><i class="fa fa-search-plus"></i> Quick view</button>
-										<img src="" alt="">
+										<img style="height: 200px; width: 200px;" src="{% static 'img/Herramienta.jpg' %}"  alt="">
 									</div>
 									<div class="product-body">
-										<h3 class="product-price">{{part.price}} <del class="product-old-price">$45.00</del></h3>
-										<div class="product-rating">
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star-o empty"></i>
-										</div>
-										<h2 class="product-name"><a href="#">Product Name Goes Here</a></h2>
+										<strong class="product-price">${{part.price}} {{part.get_clas_display}}</strong>
+										<h4 class="product-name">{{part.description}}</h4>
+										<h4 class="product-name">Part number: {{part.num_part}}</h4>
+										<h3>Stock: {{part.quantity}}</h3>
 										<div class="product-btns">
-											<button class="main-btn icon-btn"><i class="fa fa-heart"></i></button>
-											<button class="main-btn icon-btn"><i class="fa fa-exchange"></i></button>
 											<button class="primary-btn add-to-cart"><i class="fa fa-shopping-cart"></i> Add to Cart</button>
 										</div>
 									</div>

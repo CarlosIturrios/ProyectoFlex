@@ -34,9 +34,9 @@ def updateuser(request):
 
 
 @login_required()
-def products(request):
+def parts(request):
 	parts = Part.objects.all()
-	return render(request, 'products.html', {'parts' : parts})
+	return render(request, 'parts.html', {'parts' : parts})
 
 
 @login_required()
