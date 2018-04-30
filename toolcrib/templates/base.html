@@ -76,8 +76,7 @@
 
 					<!-- Search -->
 					<div class="header-search">
-						<form method="get" action="">
-							{% csrf_token %}
+						<form method="get" action="{% url 'toolcrib:parts' %}">							
 							<input class="input search-input" type="text" name="q" placeholder="Enter your keyword">
 							<select class="input search-categories" name="category">
 								<option value="0">All Categories</option>
@@ -109,19 +108,14 @@
 							<a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
 								<div class="header-btns-icon">
 									<i class="fa fa-shopping-cart"></i>
+									<span class="qty">{{ request.session.cart | length }}</span>
 								</div>
 								<strong class="text-uppercase">My Cart:</strong>
 								<br>
-								<span>my order</span>
+								<a href="{% url 'toolcrib:shopingcart' %}" class="text-uppercase">My Order</a>	
 							</a>							
 						</li>
 						<!-- /Cart -->
-
-						<!-- Mobile nav toggle-->
-						<li class="nav-toggle">
-							<button class="nav-toggle-btn main-btn icon-btn"><i class="fa fa-bars"></i></button>
-						</li>
-						<!-- / Mobile nav toggle -->
 					</ul>
 				</div>
 			</div>

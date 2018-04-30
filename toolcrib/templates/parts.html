@@ -3,59 +3,59 @@
 {% block 'main' %}
 
 
-<div id="main" class="col-md-9">
-						<div class="pull-right">
-							<ul class="store-pages">
-								<li><span class="text-uppercase">Page:</span></li>
-								<li class="active">1</li>
-								<li><a href="#">2</a></li>
-								<li><a href="#">3</a></li>
-								<li><a href="#"><i class="fa fa-caret-right"></i></a></li>
-							</ul>
-						</div>
+<!-- /store top filter -->
+<!-- STORE -->
+<div id="store">
+	<!-- row -->
+	<div class="row">
+		<!-- Product Single -->
+		{% for part in parts %}    						
+		<div class="col-md-4 col-sm-6 col-xs-6">
+			<div class="product product-single">
+				<div class="product-thumb">
+					<img style="height: 200px; width: 200px;" src="{% static 'img/Herramienta.jpg' %}"  alt="">
+				</div>
+				<div class="product-body">
+					<strong class="product-price">${{part.price}} {{part.get_clas_display}}</strong>
+					<h4 class="product-name">{{part.description}}</h4>
+					<h4 class="product-name">Part number: {{part.num_part}}</h4>
+					<h3>Stock: {{part.quantity}}</h3>
+					<div class="product-btns">
+						<form action="{% url 'toolcrib:parts' %}" method="post">
+							{% csrf_token %}
+							<input type="text" name="id_part" value="{{ part.id }}" hidden="">
+							<button class="primary-btn add-to-cart">
+								<i class="fa fa-shopping-cart"></i> Add to Cart
+							</button>
+						</form>
 					</div>
-					<!-- /store top filter -->
-					<!-- STORE -->
-					<div id="store">
-						<!-- row -->
-						<div class="row">
-							<!-- Product Single -->
-							{% for part in parts %}    						
-							<div class="col-md-4 col-sm-6 col-xs-6">
-								<div class="product product-single">
-									<div class="product-thumb">
-										<img style="height: 200px; width: 200px;" src="{% static 'img/Herramienta.jpg' %}"  alt="">
-									</div>
-									<div class="product-body">
-										<strong class="product-price">${{part.price}} {{part.get_clas_display}}</strong>
-										<h4 class="product-name">{{part.description}}</h4>
-										<h4 class="product-name">Part number: {{part.num_part}}</h4>
-										<h3>Stock: {{part.quantity}}</h3>
-										<div class="product-btns">
-											<button class="primary-btn add-to-cart"><i class="fa fa-shopping-cart"></i> Add to Cart</button>
-										</div>
-									</div>
-								</div>
-							</div>
-							{% endfor %}
-						</div>
-						<!-- /row -->
-					</div>
-					<!-- /STORE -->
-
-					<!-- store bottom filter -->
-					<div class="store-filter clearfix">
-						<div class="pull-right">
-							<ul class="store-pages">
-								<li><span class="text-uppercase">Page:</span></li>
-								<li class="active">1</li>
-								<li><a href="#">2</a></li>
-								<li><a href="#">3</a></li>
-								<li><a href="#"><i class="fa fa-caret-right"></i></a></li>
-							</ul>
-						</div>
-					</div>
-					<!-- /store bottom filter -->
+				</div>
+			</div>
+		</div>
+		{% empty %}
+		<div class="col-md-4 col-sm-6 col-xs-6">
+			<p>No results for you request</p>
+		</div>
+		{% endfor %}
+	</div>
+	<!-- /row -->
 </div>
+<!-- /STORE -->					      
+
+<!-- store bottom filter -->
+<div class="store-filter clearfix">
+	<div class="pull-right">
+		<ul class="store-pages">			
+			{% if parts.has_previous %}
+			<li><a href="?page={{ parts.previous_page_number }}&category={{ category }}&q={{ q }}"><i class="fa fa-caret-left"></i></a></li>
+			{% endif %}
+			<li class="active">Page {{ parts.number }} of {{ parts.paginator.num_pages }}</li>
+			{% if parts.has_next %}
+			<li><a href="?page={{ parts.next_page_number }}&category={{ category }}&q={{ q }}"><i class="fa fa-caret-right"></i></a></li>
+			{% endif %}
+		</ul>
+	</div>
+</div>
+<!-- /store bottom filter -->
 
 {% endblock %}
