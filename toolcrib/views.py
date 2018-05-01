@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 from django.shortcuts import render
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.models import User
 
 from .models import Part
 from .models import Order
@@ -17,7 +18,9 @@ def principal(request):
 @login_required()
 @permission_required('toolcrib.add_part')
 def ordersmanager(request):	
-	return render(request, 'ordersmanager.html')
+	orders = Order.objects.all()
+	orders = orders.filter(status='2')
+	return render(request, 'ordersmanager.html', {'orders':orders})
 
 
 @login_required()
@@ -28,11 +31,13 @@ def orderssupervisor(request):
 
 
 @login_required()
+@permission_required('toolcrib.add_part')
 def updateproduct(request):
 	return render(request, 'updateproduct.html')
 
 
 @login_required()
+@permission_required('toolcrib.add_part')
 def updateuser(request):
 	return render(request, 'updateuser.html')
 
@@ -69,9 +74,12 @@ def parts(request):
 
 @login_required()
 def shopingcart(request):
-	return render(request, 'shopingcart.html')
+	supervisors = User.objects.all()
+	supervisors = supervisors.filter(groups=2)
+	return render(request, 'shopingcart.html', {'supervisors':supervisors})
 
 @login_required()
+@permission_required('toolcrib.add_part')
 def ordersmanagercart(request):
 	return render(request, 'ordersmanagercart.html')
 

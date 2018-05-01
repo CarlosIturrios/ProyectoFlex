@@ -1,46 +1,60 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block 'main' %}
-<div class="box-body table-responsive no-padding">
-              <table class="table table-hover">
-                <tbody>
-                	<tr>
-	                  <th>ID</th>
-	                  <th>User</th>
-	                  <th>Date</th>
-	                  <th>Status</th>
-	                  <th>Reason</th>
-                	</tr>
-	                <tr>
-	                  <td>183</td>
-	                  <td>John Doe</td>
-	                  <td>11-7-2014</td>
-	                  <td><span class="label label-success">Approved</span></td>
-	                  <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
-	                </tr>
-	                <tr>
-	                  <td>219</td>
-	                  <td>Alexander Pierce</td>
-	                  <td>11-7-2014</td>
-	                  <td><span class="label label-warning">Pending</span></td>
-	                  <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
-	                </tr>
-	                <tr>
-	                  <td>657</td>
-	                  <td>Bob Doe</td>
-	                  <td>11-7-2014</td>
-	                  <td><span class="label label-primary">Approved</span></td>
-	                  <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
-	                </tr>
-	                <tr>
-	                  <td>175</td>
-	                  <td>Mike Doe</td>
-	                  <td>11-7-2014</td>
-	                  <td><span class="label label-danger">Denied</span></td>
-	                  <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
-	                </tr>
-              	</tbody>
-              </table>
+
+<div class="row">
+	<div class="col-sm-12 col-md-12 col-lg-12">
+		<table id="cart" class="table table-hover table-condensed">
+	    	<thead>
+				<tr>
+					<th style="width:50%">Product</th>
+					<th style="width:10%">Price</th>
+					<th style="width:8%">Quantity</th>
+					<th style="width:22%" class="text-center">Subtotal</th>
+					<th style="width:10%"></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td data-th="Product">
+						<div class="row">
+							<div class="col-sm-2 hidden-xs"><img style="height: 150; width: 150px;" src="{% static 'img/Herramienta.jpg' %}" class="img-responsive"/></div>
+							<div class="col-sm-10">
+								<h4 class="nomargin">Product 1</h4>
+									<p>Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Lorem ipsum dolor sit amet.</p>
+							</div>
+						</div>
+					</td>
+					<td data-th="Price">$1.99</td>
+					<td data-th="Quantity">
+						<input type="number" class="form-control text-center" value="1">
+					</td>
+					<td data-th="Subtotal" class="text-center">1.99</td>
+				</tr>
+			</tbody>
+			<tfoot>
+				<tr class="visible-xs">
+					<td class="text-center"><strong>Total 1.99</strong></td>
+				</tr>
+				<tr>
+					<td><a href="{% url 'toolcrib:orderssupervisor' %}" class="btn btn-danger"><i class="fa fa-angle-left"></i> Canceled</a></td>
+					<td class="hidden-xs text-center"><strong>Total $1.99</strong></td>
+					<td>
+						<select class="input" style="width: 120px;" name="urgent_level">
+								<option value="1">Not Urgent</option>
+								<option value="2">Regular</option>
+								<option value="3">Urgent</option>
+						</select>
+					</td>
+					<td>
+						<input type="text" name="cost_center" style="width: 250px; padding: 5px;" placeholder="Comments" required>
+					</td>
+					<td><a href="#" class="btn btn-success btn-block">Approved <i class="fa fa-angle-right"></i></a></td>
+				</tr>
+			</tfoot>
+		</table>
+	</div>
 </div>
 
 {% endblock %}

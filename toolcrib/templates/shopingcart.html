@@ -45,7 +45,9 @@
 					<td class="hidden-xs text-center"><strong>Total $1.99</strong></td>
 					<td>
 						<select class="input" style="width: 120px;" name="supervisor">
-								<option value="1">Supervisor_name</option>
+								{% for supervisor in supervisors %}
+								<option value="{{supervisor.id}}">{{supervisor.first_name}} {{supervisor.last_name}}</option>
+								{% endfor %}
 						</select>
 					</td>
 					<td>
