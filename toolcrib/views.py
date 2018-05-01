@@ -6,6 +6,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.decorators import login_required, permission_required
 
 from .models import Part
+from .models import Order
 
 # Create your views here.
 @login_required()
@@ -21,7 +22,9 @@ def ordersmanager(request):
 
 @login_required()
 def orderssupervisor(request):
-	return render(request, 'orderssupervisor.html')
+	orders = Order.objects.all()
+	orders = orders.filter(status='1')
+	return render(request, 'orderssupervisor.html', {'orders':orders})
 
 
 @login_required()
@@ -58,7 +61,7 @@ def parts(request):
 	else:
 		q = ''
 
-	paginator = Paginator(parts_list, 1)
+	paginator = Paginator(parts_list, 9)
 	parts = paginator.page(page)
 		
 	return render(request, 'parts.html', {'parts' : parts, 'category': category, 'q':q})	

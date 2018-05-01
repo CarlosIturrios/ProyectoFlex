@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block 'main' %}
 
@@ -18,7 +19,7 @@
 				<tr>
 					<td data-th="Product">
 						<div class="row">
-							<div class="col-sm-2 hidden-xs"><img src="http://placehold.it/100x100" alt="..." class="img-responsive"/></div>
+							<div class="col-sm-2 hidden-xs"><img style="height: 150; width: 150px;" src="{% static 'img/Herramienta.jpg' %}" class="img-responsive"/></div>
 							<div class="col-sm-10">
 								<h4 class="nomargin">Product 1</h4>
 									<p>Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Lorem ipsum dolor sit amet.</p>
@@ -40,9 +41,23 @@
 					<td class="text-center"><strong>Total 1.99</strong></td>
 				</tr>
 				<tr>
-					<td><a href="#" class="btn btn-warning"><i class="fa fa-angle-left"></i> Continue Shopping</a></td>
-					<td colspan="2" class="hidden-xs"></td>
+					<td><a href="{% url 'toolcrib:parts' %}" class="btn btn-warning"><i class="fa fa-angle-left"></i> Continue Shopping</a></td>
 					<td class="hidden-xs text-center"><strong>Total $1.99</strong></td>
+					<td>
+						<select class="input" style="width: 120px;" name="supervisor">
+								<option value="1">Supervisor_name</option>
+						</select>
+					</td>
+					<td>
+						<select class="input" style="width: 120px;" name="urgent_level">
+								<option value="1">Not Urgent</option>
+								<option value="2">Regular</option>
+								<option value="3">Urgent</option>
+						</select>
+					</td>
+					<td>
+						<input type="text" name="cost_center" style="width: 100px; padding: 5px;" placeholder="Cost Center" required>
+					</td>
 					<td><a href="#" class="btn btn-success btn-block">Checkout <i class="fa fa-angle-right"></i></a></td>
 				</tr>
 			</tfoot>

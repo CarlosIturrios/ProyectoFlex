@@ -9,11 +9,11 @@
 	<!-- row -->
 	<div class="row">
 		<!-- Product Single -->
-		{% for part in parts %}    						
-		<div class="col-md-4 col-sm-6 col-xs-6">
+		{% for part in parts %}
+		<div class="col-xs-12 col-sm-6 col-md-4 col-ls-4">
 			<div class="product product-single">
 				<div class="product-thumb">
-					<img style="height: 200px; width: 200px;" src="{% static 'img/Herramienta.jpg' %}"  alt="">
+					<img class="img-responsive" style="height: 200px; width: 200px;" src="{% static 'img/Herramienta.jpg' %}"  alt="">
 				</div>
 				<div class="product-body">
 					<strong class="product-price">${{part.price}} {{part.get_clas_display}}</strong>
@@ -24,16 +24,16 @@
 						<form action="{% url 'toolcrib:parts' %}" method="post">
 							{% csrf_token %}
 							<input type="text" name="id_part" value="{{ part.id }}" hidden="">
-							<button class="primary-btn add-to-cart">
+							<button type="submit" class="primary-btn add-to-cart">
 								<i class="fa fa-shopping-cart"></i> Add to Cart
 							</button>
 						</form>
 					</div>
 				</div>
 			</div>
-		</div>
+		</div>		
 		{% empty %}
-		<div class="col-md-4 col-sm-6 col-xs-6">
+		<div class="col-xs-12 col-sm-6 col-md-4 col-ls-4">
 			<p>No results for you request</p>
 		</div>
 		{% endfor %}
