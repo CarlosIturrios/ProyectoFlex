@@ -2,28 +2,30 @@
 
 {% block 'main' %}
 <div class="box-body table-responsive no-padding">
-              <table class="table table-hover">
-                <tbody>
-                	<tr>
-	                  <th>ID</th>
-	                  <th>User</th>
-	                  <th>Date</th>
-	                  <th>Status</th>
-                	</tr>
-                	{% for order in orders %}
-	                <tr>
-	                  <td><a href="{% url 'toolcrib:orderssupervisorcart' %}">{{order.id}}</a></td>
-	                  <td>{{order.user}}</td>
-	                  <td>{{order.date_order | date:"F /d/Y H:i" }}</td>
-	                  <td><span class="label label-warning">{{order.get_status_display}}</span></td>                  
-	                </tr>
-              	</tbody>
-              		{% empty %}
-					<tr class="col-xs-12 col-sm-6 col-md-4 col-ls-4">
-						<p>No orders pending</p>
-					</tr>
-					{% endfor %}
-              </table>
+	<table class="table table-hover">
+		<tbody>
+			<tr>
+				<th>ID</th>
+				<th>User</th>
+				<th>Date</th>
+				<th>N Items</th>
+				<th>Status</th>
+			</tr>
+			{% for order in orders %}
+			<tr>
+				<td><a href="{% url 'toolcrib:orderssupervisorcart' %}">{{order.id}}</a></td>
+				<td>{{order.user.get_full_name }}</td>
+				<td>{{order.date_order | date:"F /d/Y H:i" }}</td>
+				<td>{{ order.order_detail_set.all.count}}</td>
+				<td><span class="label label-warning">{{order.get_status_display}}</span></td>                  
+			</tr>
+		</tbody>
+		{% empty %}
+		<tr class="col-xs-12 col-sm-6 col-md-4 col-ls-4">
+			<p>No orders pending</p>
+		</tr>
+		{% endfor %}
+	</table>
 </div>
-
+<script>setTimeout('document.location.reload()', 9000); </script>
 {% endblock %}

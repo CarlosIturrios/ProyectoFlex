@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load humanize %}
 {% block 'main' %}
 
 
@@ -16,19 +17,20 @@
 					<img class="img-responsive" style="height: 200px; width: 200px;" src="{% static 'img/Herramienta.jpg' %}"  alt="">
 				</div>
 				<div class="product-body">
-					<strong class="product-price">${{part.price}} {{part.get_clas_display}}</strong>
-					<h4 class="product-name">{{part.description}}</h4>
-					<h4 class="product-name">Part number: {{part.num_part}}</h4>
-					<h3>Stock: {{part.quantity}}</h3>
-					<div class="product-btns">
-						<form action="{% url 'toolcrib:parts' %}" method="post">
-							{% csrf_token %}
-							<input type="text" name="id_part" value="{{ part.id }}" hidden="">
-							<button type="submit" class="primary-btn add-to-cart">
-								<i class="fa fa-shopping-cart"></i> Add to Cart
-							</button>
-						</form>
-					</div>
+					<form action="{% url 'toolcrib:parts' %}" method="post" class="form-inline">
+						{% csrf_token %}
+						<strong class="product-price">${{part.price|intcomma}} {{part.get_clas_display}}</strong>
+						<h4 class="product-name">{{part.description}}</h4>
+						<h4 class="product-name">Part number: {{part.num_part}}</h4>
+						<h3>Stock: {{part.quantity}}</h3>
+						<div class="product-btns">
+								<input type="text" name="id_part" value="{{ part.id }}" hidden="">		
+								<input style="width: 70px" class="form-control" type="number" name="cant" value="1" placeholder="Quantity" >
+								<button type="submit" class="primary-btn add-to-cart">
+									<i class="fa fa-shopping-cart"></i> Add to Cart
+								</button>						
+						</div>
+					</form>
 				</div>
 			</div>
 		</div>		

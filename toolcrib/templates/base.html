@@ -95,9 +95,9 @@
 								<div class="header-btns-icon">
 									<i class="fa fa-user-o"></i>
 								</div>
-								<strong class="text-uppercase">{{ user.last_name }}</strong>
-							</div>
-							<strong>{{ user.groups.last.name }} </strong>
+								<strong class="text-uppercase">{{ user.first_name }}</strong>
+								<small>{{ user.groups.last.name }} </small>
+							</div>							
 							<a href="{% url 'toolcrib:logout' %}" class="text-uppercase">Log Out</a>		
 						</li>
 						<!-- /Account -->

@@ -24,7 +24,7 @@ class Part(models.Model):
 		)
 	)
 	location = models.CharField(max_length=200, null=True, blank=True)
-	price = models.DecimalField(max_digits=10, decimal_places=4, null=False, blank=False)
+	price = models.DecimalField(max_digits=10, decimal_places=2, null=False, blank=False)
 	quantity = models.PositiveIntegerField(null=False, blank=False)
 	max_quantity = models.PositiveIntegerField(null=False, blank=False)
 	min_quantity = models.PositiveIntegerField(null=False, blank=False)
