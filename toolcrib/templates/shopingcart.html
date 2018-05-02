@@ -37,7 +37,7 @@
 								</div>
 							</div>
 						</td>
-						<td data-th="Price">{{ item.part.price | intcomma }}</td>
+						<td data-th="Price">${{ item.part.price | intcomma }} {{ part_detail.part.get_clas_display }}</td>
 						<td data-th="Quantity">
 							<input type="number" class="form-control text-center" value="{{ item.cant }}" disabled="true">
 						</td>						
