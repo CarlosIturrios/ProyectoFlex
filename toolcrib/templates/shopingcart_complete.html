@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% load humanize %}
+
+{% block 'main' %}
+
+<div class="row">
+	<div class="col-sm-12 col-md-12 col-lg-12">
+		<div class="alert alert-success">
+  			<strong>Success!</strong> <p>Order Submitted succesfully</p>
+  			<a href="{% url 'toolcrib:parts' %}" class="btn btn-success">Continue Shopping</a>
+		</div>
+	</div>
+</div>
+{% endblock %}

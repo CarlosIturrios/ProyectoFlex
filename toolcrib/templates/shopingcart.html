@@ -4,6 +4,17 @@
 
 {% block 'main' %}
 
+<!-- BREADCRUMB -->
+<div id="breadcrumb">
+	<div class="container">
+		<ul class="breadcrumb">
+			<li><a href="{% url 'toolcrib:principal' %}">ToolCrib</a></li>
+			<li class="active">Shopping Cart</li>
+		</ul>
+	</div>
+</div><br>
+<!-- /BREADCRUMB -->
+
 <div class="row">
 	<div class="col-sm-12 col-md-12 col-lg-12">
 		<table id="cart" class="table table-hover table-condensed">
@@ -67,6 +78,9 @@
 				</form>
 			</tfoot>
 		</table>		
+		<a href="{% url 'toolcrib:deleteCart' %}" class="btn btn-danger">Clear Cart 
+			<i class="fa fa-trash"></i>
+		</a>
 	</div>
 </div>
 {% endblock %}

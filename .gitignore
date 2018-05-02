@@ -7,5 +7,7 @@ env_ProyectoFlex/
 __pycache__/
 local_settings.py
 
+*.jpg
+*.png
 .env
 db.sqlite3

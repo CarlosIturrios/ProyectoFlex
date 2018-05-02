@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.models import User
@@ -17,8 +17,7 @@ def principal(request):
 @login_required()
 @permission_required('toolcrib.add_part')
 def ordersmanager(request):	
-	orders = Order.objects.all()
-	orders = orders.filter(status='2')
+	orders = Order.objects.filter(status='2')
 	return render(request, 'ordersmanager.html', {'orders':orders})
 
 
@@ -113,15 +112,53 @@ def shopingcart(request):
 
 		del request.session['cart']
 
-		return redirect('toolcrib:parts')
+		return redirect('toolcrib:shopingcart_complete')
 
 
 @login_required()
 @permission_required('toolcrib.add_part')
-def ordersmanagercart(request):
-	return render(request, 'ordersmanagercart.html')
+def ordersmanagercart(request, pk):
+	order = get_object_or_404(Order, pk=pk)
+	if request.method == "POST":
+		comments = request.POST.get('comments', None)
+		Order.objects.filter(pk= pk).update(status = '4')
+		Order.objects.filter(pk= pk).update(comments = comments)
+		return redirect('toolcrib:ordersmanager')
+	return render(request, 'ordersmanagercart.html', {'order': order})
 
 
 @login_required()
-def orderssupervisorcart(request):
-	return render(request, 'orderssupervisorcart.html')
+def orderssupervisorcart(request, pk):	
+	order = get_object_or_404(Order, pk=pk)
+	if request.method == "POST":
+		level = request.POST.get('level', None)
+		comments = request.POST.get('comments', None)
+		Order.objects.filter(pk= pk).update(level = level)
+		Order.objects.filter(pk= pk).update(status = '2')
+		Order.objects.filter(pk= pk).update(comments = comments)
+		return redirect('toolcrib:orderssupervisor')
+
+	return render(request, 'orderssupervisorcart.html', {'order': order})
+
+
+
+@login_required()
+def orderCanceled(request, pk):
+	order = get_object_or_404(Order, pk=pk)
+	if request.method == "POST":
+		Order.objects.filter(pk= pk).update(status = '3')
+		return redirect('toolcrib:orderssupervisor')
+	return render(request, 'orderCanceled.html', {'order':order})
+
+
+@login_required()
+def shopingcart_complete(request):
+	return render(request, 'shopingcart_complete.html')
+
+
+@login_required()
+def deleteCart(request):
+	if request.method == "POST":
+		del request.session['cart']
+		return redirect('toolcrib:parts')
+	return render(request, 'deleteCart.html')

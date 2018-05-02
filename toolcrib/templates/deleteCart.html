@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load humanize %}
+
+{% block 'main' %}
+
+<div class="row">
+	<div class="col-sm-12 col-md-12 col-lg-12">
+		<div class="alert alert-danger">
+  			<strong>Sucess!</strong> <p>The cart is empty!</p>
+  			<form action="." method="post">
+  				{% csrf_token %}
+  				<button type="submit" class="btn btn-success">Continue Shopping</a>
+  			</form>
+		</div>
+	</div>
+</div>
+{% endblock %}

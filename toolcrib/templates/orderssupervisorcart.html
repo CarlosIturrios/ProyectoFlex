@@ -1,7 +1,20 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load humanize %}
 
 {% block 'main' %}
+
+<!-- /BREADCRUMB -->
+<div id="breadcrumb">
+	<div class="container">
+		<ul class="breadcrumb">
+			<li><a href="{% url 'toolcrib:principal' %}">ToolCrib</a></li>
+			<li><a href="{% url 'toolcrib:orderssupervisor' %}">Orders</a></li>
+			<li class="active">Order detail</li>
+		</ul>
+	</div>
+</div><br>
+<!-- /BREADCRUMB -->
 
 <div class="row">
 	<div class="col-sm-12 col-md-12 col-lg-12">
@@ -11,47 +24,54 @@
 					<th style="width:50%">Product</th>
 					<th style="width:10%">Price</th>
 					<th style="width:8%">Quantity</th>
-					<th style="width:22%" class="text-center">Subtotal</th>
-					<th style="width:10%"></th>
 				</tr>
 			</thead>
 			<tbody>
+				{% for part_detail in order.order_detail_set.all %}
 				<tr>
 					<td data-th="Product">
 						<div class="row">
-							<div class="col-sm-2 hidden-xs"><img style="height: 150; width: 150px;" src="{% static 'img/Herramienta.jpg' %}" class="img-responsive"/></div>
+							<div class="col-sm-2 hidden-xs">
+								<img style="height: 50; width: 50px;" src="{% static 'img/Herramienta.jpg' %}" class="img-responsive"/>
+							</div>
 							<div class="col-sm-10">
-								<h4 class="nomargin">Product 1</h4>
-									<p>Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Lorem ipsum dolor sit amet.</p>
+								<h4 class="nomargin">{{ part_detail.part.num_part }}</h4>
+									<p>{{ part_detail.part.description }}</p>
 							</div>
 						</div>
 					</td>
-					<td data-th="Price">$1.99</td>
+					<td data-th="Price">{{ part_detail.part.price | intcomma  }}</td>
 					<td data-th="Quantity">
-						<input type="number" class="form-control text-center" value="1">
+						<input type="number" class="form-control text-center" value="{{ part_detail.quantity }}" disabled="true">
 					</td>
-					<td data-th="Subtotal" class="text-center">1.99</td>
 				</tr>
+				{% endfor %}
 			</tbody>
 			<tfoot>
-				<tr class="visible-xs">
-					<td class="text-center"><strong>Total 1.99</strong></td>
-				</tr>
-				<tr>
-					<td><a href="{% url 'toolcrib:orderssupervisor' %}" class="btn btn-danger"><i class="fa fa-angle-left"></i> Canceled</a></td>
-					<td class="hidden-xs text-center"><strong>Total $1.99</strong></td>
-					<td>
-						<select class="input" style="width: 120px;" name="urgent_level">
-								<option value="1">Not Urgent</option>
-								<option value="2">Regular</option>
-								<option value="3">Urgent</option>
-						</select>
-					</td>
-					<td>
-						<input type="text" name="cost_center" style="width: 250px; padding: 5px;" placeholder="Comments" required>
-					</td>
-					<td><a href="#" class="btn btn-success btn-block">Approved <i class="fa fa-angle-right"></i></a></td>
-				</tr>
+					<tr>
+						<td>
+							<a href="{% url 'toolcrib:orderCanceled' order.pk %}" class="btn btn-danger">
+								<i class="fa fa-angle-left"></i> Canceled
+							</a>
+						</td>
+					<form action="." method="post">
+						{% csrf_token %}
+						<td>							
+							<div class="">
+								<select class="input" style="width: 120px;" name="level">
+										<option value="1" {% if order.level == '1' %}selected{% endif %}>Not Urgent</option>
+										<option value="2" {% if order.level == '2' %}selected{% endif %}>Regular</option>
+										<option value="3" {% if order.level == '3' %}selected{% endif %}>Urgent</option>
+								</select>
+								<input class="form-control" type="text" name="comments" style="width: 250px;" placeholder="Comments" >
+							</div>
+						</td>
+						<td>
+							<button type="submit" class="btn btn-success btn-block">Approved <i class="fa fa-angle-right"></i>
+							</button>
+						</td>
+					</tr>
+				</form>
 			</tfoot>
 		</table>
 	</div>

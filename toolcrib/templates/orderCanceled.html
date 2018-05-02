@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block 'main' %}
+
+<div class="row">
+    <div class="col-sm-12 col-md-12 col-lg-12">
+        <div class="alert alert-danger">
+            <strong>Danger!</strong> <p>You want to cancel the order?</p>
+            <div>
+                <a href="{% url 'toolcrib:orderssupervisorcart' order.pk %}" class="btn btn-success">Return</a>
+            </div>
+            <br>
+            <form action="." method="post">
+                {% csrf_token %}
+                <button class="btn btn-danger" >Cancel</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,7 +1,20 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load humanize %}
 
 {% block 'main' %}
+
+<!-- /BREADCRUMB -->
+<div id="breadcrumb">
+	<div class="container">
+		<ul class="breadcrumb">
+			<li><a href="{% url 'toolcrib:principal' %}">ToolCrib</a></li>
+			<li><a href="{% url 'toolcrib:ordersmanager' %}">Orders</a></li>
+			<li class="active">Order detail</li>
+		</ul>
+	</div>
+</div><br>
+<!-- /BREADCRUMB -->
 
 <div class="row">
 	<div class="col-sm-12 col-md-12 col-lg-12">
@@ -11,47 +24,52 @@
 					<th style="width:50%">Product</th>
 					<th style="width:10%">Price</th>
 					<th style="width:8%">Quantity</th>
-					<th style="width:8%">Location</th>					
-					<th style="width:22%" class="text-center">Subtotal</th>
+					<th style="width:12%">Location</th>
 				</tr>
 			</thead>
 			<tbody>
+				{% for part_detail in order.order_detail_set.all %}
 				<tr>
 					<td data-th="Product">
 						<div class="row">
-							<div class="col-sm-2 hidden-xs"><img style="height: 150; width: 150px;" src="{% static 'img/Herramienta.jpg' %}" class="img-responsive"/></div>
+							<div class="col-sm-2 hidden-xs">
+								<img style="height: 50; width: 50px;" src="{% static 'img/Herramienta.jpg' %}" class="img-responsive"/>
+							</div>
 							<div class="col-sm-10">
-								<h4 class="nomargin">Product 1</h4>
-									<p>Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Lorem ipsum dolor sit amet.</p>
+								<h4 class="nomargin">{{ part_detail.part.num_part }}</h4>
+									<p>{{ part_detail.part.description }}</p>
 							</div>
 						</div>
 					</td>
-					<td data-th="Price">$1.99</td>
+					<td data-th="Price">{{ part_detail.part.price | intcomma  }}</td>
 					<td data-th="Quantity">
-						<input type="number" class="form-control text-center" value="1">
+						<input type="number" class="form-control text-center" value="{{ part_detail.quantity }}" disabled="true">
 					</td>
-					<td data-th="Location">
-						Stand 4 Space 8
+					<td>
+						<div class="col-sm-10">
+							<p>{{ part_detail.part.location }}</p>
+						</div>
 					</td>
-					<td data-th="Subtotal" class="text-center">1.99</td>					
 				</tr>
+				{% endfor %}
 			</tbody>
 			<tfoot>
-				<tr class="visible-xs">
-					<td class="text-center"><strong>Total 1.99</strong></td>
-				</tr>
 				<tr>
-					<td class="hidden-xs text-center"><strong>Total $1.99</strong></td>
 					<td>
-						<input type="text" name="cost_center" style="width: 250px; padding: 5px;" placeholder="Comments" required>
+						<input type="text" name="comments" style="width: 250px; padding: 5px;" placeholder="Comments" required>
 					</td>
 					<td data-th="Usuario:">
-						Flex98 Production
+						User number: {{ order.user }}
 					</td>
 					<td data-th="Cost Center">
-						Linea 8
-					</td>					
-					<td><a href="#" class="btn btn-success btn-block">Approved <i class="fa fa-angle-right"></i></a></td>
+						Cost Center: {{ order.cost_center }}
+					</td> 
+					<form action="." method="post">		
+						{% csrf_token %}		
+						<td>
+							<button type="submit" class="btn btn-success btn-block">Approved <i class="fa fa-angle-right"></i></button>
+						</td>
+					</form>	
 				</tr>
 			</tfoot>
 		</table>

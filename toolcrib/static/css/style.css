@@ -1670,6 +1670,16 @@ textarea.input {
 .table>tbody>tr>td, .table>tfoot>tr>td{
     vertical-align: middle;
 }
+.box {
+    position: relative;
+    border-radius: 3px;
+    background: #ffffff;
+    border-top: 3px solid #d2d6de;
+    margin-bottom: 20px;
+    width: 100%;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.1);
+}
+
 @media screen and (max-width: 600px) {
     table#cart tbody td .form-control{
     width:20%;
@@ -1689,7 +1699,7 @@ textarea.input {
   
   table#cart thead { display: none; }
   table#cart tbody td { display: block; padding: .6rem; min-width:320px;}
-  table#cart tbody tr td:first-child { background: #333; color: #fff; }
+  /*table#cart tbody tr td:first-child { background: #333; color: #fff; }*/
   table#cart tbody td:before {
     content: attr(data-th); font-weight: bold;
     display: inline-block; width: 8rem;
@@ -1701,3 +1711,4 @@ textarea.input {
   table#cart tfoot td .btn{display:block;}
   
 }
+
