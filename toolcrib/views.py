@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.models import User
 
 from .models import Part, Order, OrderDetail
+from .forms import PartForm, UserForm
 
 # Create your views here.
 @login_required()
@@ -17,6 +18,7 @@ def principal(request):
 @login_required()
 @permission_required('toolcrib.add_part')
 def ordersmanager(request):	
+	# Order.status (2=approved)
 	orders = Order.objects.filter(status='2')
 	return render(request, 'ordersmanager.html', {'orders':orders})
 
@@ -31,13 +33,24 @@ def orderssupervisor(request):
 @login_required()
 @permission_required('toolcrib.add_part')
 def updateproduct(request):
-	return render(request, 'updateproduct.html')
+	if request.method == 'POST':
+		part = get_object_or_404(Part, num_part=request.POST.get('num_part').strip())
+		form = PartForm(request.POST, request.FILES)
+		if form.is_valid():
+			part.category = form.cleaned_data['category']
+			part.image = form.cleaned_data['image']
+			part.save()
+			return redirect('toolcrib:parts')
+	else:
+		form = PartForm()
+	return render(request, 'updateproduct.html', {'form': form})
 
 
 @login_required()
 @permission_required('toolcrib.add_part')
 def updateuser(request):
-	return render(request, 'updateuser.html')
+	form = UserForm()
+	return render(request, 'updateuser.html',{'form':form})
 
 
 @login_required()
@@ -84,7 +97,7 @@ def shopingcart(request):
 		supervisors = User.objects.filter(groups__name='Supervisor')
 		cart_v = []		
 		if 'cart' not in request.session:
-			return redirect('toolcrib:parts')	
+			request.session['cart'] = []
 		for item in request.session['cart']:
 			p = Part.objects.get(id=item['id_part'])
 			cart_v.append(
@@ -121,8 +134,9 @@ def ordersmanagercart(request, pk):
 	order = get_object_or_404(Order, pk=pk)
 	if request.method == "POST":
 		comments = request.POST.get('comments', None)
-		Order.objects.filter(pk= pk).update(status = '4')
-		Order.objects.filter(pk= pk).update(comments = comments)
+		order.status = '4'
+		order.comments = comments
+		order.save()
 		return redirect('toolcrib:ordersmanager')
 	return render(request, 'ordersmanagercart.html', {'order': order})
 
@@ -133,9 +147,10 @@ def orderssupervisorcart(request, pk):
 	if request.method == "POST":
 		level = request.POST.get('level', None)
 		comments = request.POST.get('comments', None)
-		Order.objects.filter(pk= pk).update(level = level)
-		Order.objects.filter(pk= pk).update(status = '2')
-		Order.objects.filter(pk= pk).update(comments = comments)
+		order.level = level
+		order.status = '2'
+		order.comments = comments
+		order.save()
 		return redirect('toolcrib:orderssupervisor')
 
 	return render(request, 'orderssupervisorcart.html', {'order': order})
@@ -146,7 +161,8 @@ def orderssupervisorcart(request, pk):
 def orderCanceled(request, pk):
 	order = get_object_or_404(Order, pk=pk)
 	if request.method == "POST":
-		Order.objects.filter(pk= pk).update(status = '3')
+		order.status = '3'
+		order.save()
 		return redirect('toolcrib:orderssupervisor')
 	return render(request, 'orderCanceled.html', {'order':order})
 

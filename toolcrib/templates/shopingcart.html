@@ -72,7 +72,9 @@
 							<input type="text" name="cost_center" style="width: 100px; padding: 5px;" placeholder="Cost Center" required>
 						</td>
 						<td>
-							<button type="submit" class="btn btn-success btn-block">Checkout <i class="fa fa-angle-right"></i></button>
+							{% if request.session.cart|length > 0 %}
+								<button type="submit" class="btn btn-success btn-block">Checkout <i class="fa fa-angle-right"></i></button>
+							{% endif %}
 						</td>
 					</tr>
 				</form>
