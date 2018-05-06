@@ -24,11 +24,11 @@ class UserForm(forms.Form):
 	username = forms.CharField(max_length=191, required=True, strip=True)
 	email = forms.CharField(max_length=191, required=True, strip=True)
 	password = forms.CharField(max_length=191, required=True, strip=True)
-	groups = forms.ChoiceField(
+	group = forms.ChoiceField(
 		required=True, choices=(
-			('1','Manager'),
-			('2','Supervisor'),
-			('3','Technical'),
-			('4','Production')
+			('Manager','Manager'),
+			('Supervisor','Supervisor'),
+			('Technical','Technical'),
+			('Production','Production')
 		)
 	)

@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+import urllib
 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.decorators import login_required, permission_required
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 
 from .models import Part, Order, OrderDetail
 from .forms import PartForm, UserForm
@@ -34,13 +35,13 @@ def orderssupervisor(request):
 @permission_required('toolcrib.add_part')
 def updateproduct(request):
 	if request.method == 'POST':
-		part = get_object_or_404(Part, num_part=request.POST.get('num_part').strip())
+		part = get_object_or_404(Part, num_part=request.POST.get('num_part'))
 		form = PartForm(request.POST, request.FILES)
 		if form.is_valid():
 			part.category = form.cleaned_data['category']
 			part.image = form.cleaned_data['image']
 			part.save()
-			return redirect('toolcrib:parts')
+			return redirect('toolcrib:parts', )
 	else:
 		form = PartForm()
 	return render(request, 'updateproduct.html', {'form': form})
@@ -49,7 +50,22 @@ def updateproduct(request):
 @login_required()
 @permission_required('toolcrib.add_part')
 def updateuser(request):
-	form = UserForm()
+	if request.method == 'POST':
+		user = get_object_or_404(User, username=request.POST.get('username'))
+		form = UserForm(request.POST)
+		if form.is_valid():			
+			group = Group.objects.get(name=form.cleaned_data['group'])
+			user.email = form.cleaned_data['email']
+			user.set_password(form.cleaned_data['password'])
+			user.groups.clear()#Remove user from previous grups
+			user.groups.add(group)#Add user to form group
+			user.save()
+
+			response = redirect('toolcrib:principal')
+			response['Location'] += '?%s' % urllib.urlencode({'toast': 'User update successful'})
+			return response
+	else:
+		form = UserForm()
 	return render(request, 'updateuser.html',{'form':form})
 
 
@@ -71,9 +87,9 @@ def parts(request):
 
 	q = request.GET.get('q', None)
 	page = request.GET.get('page', 1)
-	category = request.GET.get('category', None)
+	category = request.GET.get('category', None)	
 		
-	parts_list = Part.objects.all()
+	parts_list = Part.objects.filter(quantity__gt = 0)
 		
 	if category != None and category != '0':
 		parts_list = parts_list.filter(category=category)
