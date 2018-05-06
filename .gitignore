@@ -11,3 +11,6 @@ local_settings.py
 *.png
 .env
 db.sqlite3
+
+
+.DS_Store

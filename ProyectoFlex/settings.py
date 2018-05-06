@@ -134,4 +134,4 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'tool.crib.flex@gmail.com'
 EMAIL_HOST_PASSWORD = 'Flextronics2018'
 EMAIL_PORT = 587
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+DEFAULT_FROM_EMAIL = 'ToolCrib <tool.crib.flex@gmail.com>'

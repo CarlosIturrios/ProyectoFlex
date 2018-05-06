@@ -10,6 +10,7 @@ from django.core.mail import EmailMessage, EmailMultiAlternatives #email sender
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.models import User, Group
+from django.conf import settings
 
 from .models import Part, Order, OrderDetail
 from .forms import PartForm, UserForm
@@ -147,21 +148,24 @@ def shopingcart(request):
 			)
 
 		del request.session['cart']
+		
+
+		subject = 'ToolCrib: New order #{0} created by {1}'.format(o.id, o.user.get_full_name())
+		html_content = get_template('emails/order_created.html').render({'order': o})
+
+		msg = EmailMessage(
+			subject=subject,
+			body=html_content,
+			from_email=settings.DEFAULT_FROM_EMAIL,
+			to=[o.supervisor.email,],
+			cc=[o.user.email,],
+		)
+		msg.content_subtype = "html"
+		msg.send(fail_silently= not settings.DEBUG)
+
 		toast_text = 'Order {0} done successful'.format(o.id) 
 		response = redirect('toolcrib:parts')
 		response['Location'] += '?%s' % urllib.urlencode({'toast': toast_text})
-		subject, from_email, to = 'Order #{0} created by {1}'.format(o.id, o.user), 'tool.crib.flex@gmail.com', o.supervisor.email
-		text_content = 'Order #{0} created by {1} is in progress, please approved or cancel the order.'.format(o.id, o.user)
-		html_content = '<p>This is an <strong>supervisor</strong> message.</p>'
-		msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
-		msg.attach_alternative(html_content, "text/html")
-		msg.send()
-		subject, from_email, to = 'Order #{0} created by {1}'.format(o.id, o.user), 'tool.crib.flex@gmail.com', o.user.email
-		text_content = 'Order #{0} created by {1} is in progress, you have to wait a few minutes to get information about the status from your order'.format(o.id, o.user)
-		html_content = '<p>This is an <strong>usuario</strong> message.</p>'
-		email = EmailMultiAlternatives(subject, text_content, from_email, [to])
-		email.attach_alternative(html_content, "text/html")
-		email.send()
 		return response
 
 
@@ -210,7 +214,6 @@ def orderssupervisorcart(request, pk):
 		return response
 
 	return render(request, 'orderssupervisorcart.html', {'order': order})
-
 
 
 @login_required()
