@@ -21,6 +21,5 @@ urlpatterns = [
  	url(r'^ordersmanagercart/(?P<pk>[0-9]+)/$', views.ordersmanagercart, name='ordersmanagercart'),
  	url(r'^orderssupervisorcart/(?P<pk>[0-9]+)/$', views.orderssupervisorcart, name='orderssupervisorcart'),
  	url(r'^orderCanceled/(?P<pk>[0-9]+)/$', views.orderCanceled, name='orderCanceled'),
- 	url(r'^shopingcart_complete/$', views.shopingcart_complete, name='shopingcart_complete'),
  	url(r'^deleteCart/$', views.deleteCart, name='deleteCart'),
 ]

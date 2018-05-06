@@ -3,7 +3,11 @@ from __future__ import unicode_literals
 import urllib
 
 from django.shortcuts import render, redirect, get_object_or_404
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.http import HttpResponse
+from django.template import Context
+from django.template.loader import render_to_string, get_template
+from django.core.mail import EmailMessage
+from django.core.mail import EmailMessage
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.models import User, Group
 
@@ -41,7 +45,10 @@ def updateproduct(request):
 			part.category = form.cleaned_data['category']
 			part.image = form.cleaned_data['image']
 			part.save()
-			return redirect('toolcrib:parts', )
+			response = redirect('toolcrib:ordersmanager')
+			toast_text = 'Tool {0} update successful'.format(part.num_part) 
+			response['Location'] += '?%s' % urllib.urlencode({'toast': toast_text})
+			return response11
 	else:
 		form = PartForm()
 	return render(request, 'updateproduct.html', {'form': form})
@@ -60,9 +67,9 @@ def updateuser(request):
 			user.groups.clear()#Remove user from previous grups
 			user.groups.add(group)#Add user to form group
 			user.save()
-
-			response = redirect('toolcrib:principal')
-			response['Location'] += '?%s' % urllib.urlencode({'toast': 'User update successful'})
+			toast_text = 'User {0} update successful'.format(user.username) 
+			response = redirect('toolcrib:ordersmanager')
+			response['Location'] += '?%s' % urllib.urlencode({'toast': toast_text})
 			return response
 	else:
 		form = UserForm()
@@ -140,8 +147,14 @@ def shopingcart(request):
 			)
 
 		del request.session['cart']
-
-		return redirect('toolcrib:shopingcart_complete')
+		toast_text = 'Order {0} done successful'.format(o.id) 
+		response = redirect('toolcrib:parts')
+		response['Location'] += '?%s' % urllib.urlencode({'toast': toast_text})
+		subject = 'Order #{0} created by {1}'.format(o.id, o.user)
+		message = 'Order #{0} created by {1} is in progress, you have to wait a few minutes to get information about the status from your order'.format(o.id, o.user)
+		email = EmailMessage(subject, message, to = ['c.iturriosalcaraz@gmail.com'], headers = {'Reply-To': o.user.email})
+		email.send()
+		return response
 
 
 @login_required()
@@ -153,7 +166,15 @@ def ordersmanagercart(request, pk):
 		order.status = '4'
 		order.comments = comments
 		order.save()
-		return redirect('toolcrib:ordersmanager')
+		toast_text = 'Order {0} Done successful'.format(order.id) 
+		response = redirect('toolcrib:ordersmanager')
+		response['Location'] += '?%s' % urllib.urlencode({'toast': toast_text})
+		subject = 'Order #{0} Done lets go to toolcrib'.format(order.id)
+		message = 'Order #{0} is Done. {1} lets go to toolcrib to get your material'.format(order.id, order.user)
+		email = EmailMessage(subject, message, to = ['c.iturriosalcaraz@gmail.com'], headers = {'Reply-To': o.user.email})
+		email.send()
+		return response
+
 	return render(request, 'ordersmanagercart.html', {'order': order})
 
 
@@ -167,7 +188,14 @@ def orderssupervisorcart(request, pk):
 		order.status = '2'
 		order.comments = comments
 		order.save()
-		return redirect('toolcrib:orderssupervisor')
+		toast_text = 'Order {0} approved successful'.format(order.id) 
+		response = redirect('toolcrib:orderssupervisor')
+		response['Location'] += '?%s' % urllib.urlencode({'toast': toast_text})
+		subject = 'Order #{0} approved by {1}'.format(order.id, order.supervisor)
+		message = 'Order #{0} approved by {1} is in progress'.format(o.id, o.supervisor)
+		email = EmailMessage(subject, message, to = ['c.iturriosalcaraz@gmail.com'], headers = {'Reply-To': o.user.email})
+		email.send()
+		return response
 
 	return render(request, 'orderssupervisorcart.html', {'order': order})
 
@@ -179,13 +207,12 @@ def orderCanceled(request, pk):
 	if request.method == "POST":
 		order.status = '3'
 		order.save()
+		subject = 'Order #{0} Canceled'.format(order.id)
+		message = 'Order #{0} was Canceled. Comments: {1}'.format(order.id, order.comments)
+		email = EmailMessage(subject, message, to = ['c.iturriosalcaraz@gmail.com'], headers = {'Reply-To': o.user.email})
+		email.send()
 		return redirect('toolcrib:orderssupervisor')
 	return render(request, 'orderCanceled.html', {'order':order})
-
-
-@login_required()
-def shopingcart_complete(request):
-	return render(request, 'shopingcart_complete.html')
 
 
 @login_required()
