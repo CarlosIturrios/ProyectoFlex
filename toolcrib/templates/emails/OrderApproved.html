@@ -1,17 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>A Responsive Email Template</title>
-<!--
-
-    An email present from your friends at Litmus (@litmusapp)
-
-    Email is surprisingly hard. While this has been thoroughly tested, your mileage may vary.
-    It's highly recommended that you test using a service like Litmus (http://litmus.com) and your own devices.
-
-    Enjoy!
-
- -->
+<title>Toolcrib</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -146,10 +136,10 @@
                         <!-- COPY -->
                         <table width="100%" border="0" cellspacing="0" cellpadding="0">
                             <tr>
-                                <td align="center" style="font-size: 32px; font-family: Helvetica, Arial, sans-serif; color: #333333; padding-top: 30px;" class="padding-copy">Your order is on its way!</td>
+                                <td align="center" style="font-size: 32px; font-family: Helvetica, Arial, sans-serif; color: #333333; padding-top: 30px;" class="padding-copy">A new Order request!</td>
                             </tr>
                             <tr>
-                                <td align="left" style="padding: 20px 0 0 0; font-size: 16px; line-height: 25px; font-family: Helvetica, Arial, sans-serif; color: #666666;" class="padding-copy"> New order #{{ order.id }} created by {{ order.user.get_ful_name }} on {{ order.date_order | date:"F /d/Y H:i"  }} when status {{ order.get_status_display }} and this order is {{ order.get_level_display }}.</td>
+                                <td align="left" style="padding: 20px 0 0 0; font-size: 16px; line-height: 25px; font-family: Helvetica, Arial, sans-serif; color: #666666;" class="padding-copy"> New order #{{ order.id }} Approved by {{ order.supervisor.get_ful_name }} on {{ order.date_order | date:"F /d/Y H:i"  }} when status {{ order.get_status_display }} and this order is {{ order.get_level_display }}.</td>
                             </tr>
                         </table>
                     </td>
@@ -184,7 +174,7 @@
                                                     <table cellpadding="0" cellspacing="0" border="0" width="100%">
                                                         <tr>
                                                             <td align="left" style="font-family: Arial, sans-serif; color: #333333; font-size: 16px;">
-                                                                {{ part_detail.part.num_part }} - {{ part_detail.part.description }}
+                                                                #{{ part_detail.part.num_part }} - {{ part_detail.part.description }}
                                                             </td>
                                                         </tr>
                                                     </table>
@@ -228,6 +218,7 @@
                                             <td align="left" style="padding: 0 0 0 0; font-size: 14px; line-height: 18px; font-family: Helvetica, Arial, sans-serif; color: #aaaaaa; font-style: italic;" class="padding-copy">
                                                 Comments: {{ order.comments }}
                                                 Cost Center: {{ order.cost_center }}
+                                                Employee number: {{ order.user }}
                                             </td>
                                         </tr>
                                     </table>

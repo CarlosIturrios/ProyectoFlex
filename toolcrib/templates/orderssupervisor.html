@@ -21,6 +21,7 @@
 				<th>User</th>
 				<th>Date</th>
 				<th>N Items</th>
+				<th>Urgency</th>
 				<th>Status</th>
 			</tr>
 			{% for order in orders %}
@@ -28,9 +29,10 @@
 				<td>				
 					<a class="btn btn-primary" href="{% url 'toolcrib:orderssupervisorcart' order.pk %}">{{order.id}}</a>
 				</td>				
-				<td>{{order.user.get_full_name }}</td>
+				<td>{{order.user }}</td>
 				<td>{{order.date_order | date:"F /d/Y H:i" }}</td>
 				<td>{{ order.order_detail_set.all.count}}</td>
+				<td><span class="label label-success">{{order.get_level_display}}</span></td>                  
 				<td><span class="label label-warning">{{order.get_status_display}}</span></td>                  
 			</tr>
 		</tbody>
