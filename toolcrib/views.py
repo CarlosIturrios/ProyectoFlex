@@ -3,11 +3,11 @@ from __future__ import unicode_literals
 import urllib
 
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponse
-from django.template import Context
-from django.template.loader import render_to_string, get_template
-from django.core.mail import EmailMessage
-from django.core.mail import EmailMessage
+from django.http import HttpResponse #email sender
+from django.template import Context #email sender
+from django.template.loader import render_to_string, get_template #email sender
+from django.core.mail import EmailMessage, EmailMultiAlternatives #email sender
+from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.models import User, Group
 
@@ -150,9 +150,17 @@ def shopingcart(request):
 		toast_text = 'Order {0} done successful'.format(o.id) 
 		response = redirect('toolcrib:parts')
 		response['Location'] += '?%s' % urllib.urlencode({'toast': toast_text})
-		subject = 'Order #{0} created by {1}'.format(o.id, o.user)
-		message = 'Order #{0} created by {1} is in progress, you have to wait a few minutes to get information about the status from your order'.format(o.id, o.user)
-		email = EmailMessage(subject, message, to = ['c.iturriosalcaraz@gmail.com'], headers = {'Reply-To': o.user.email})
+		subject, from_email, to = 'Order #{0} created by {1}'.format(o.id, o.user), 'tool.crib.flex@gmail.com', o.supervisor.email
+		text_content = 'Order #{0} created by {1} is in progress, please approved or cancel the order.'.format(o.id, o.user)
+		html_content = '<p>This is an <strong>supervisor</strong> message.</p>'
+		msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
+		msg.attach_alternative(html_content, "text/html")
+		msg.send()
+		subject, from_email, to = 'Order #{0} created by {1}'.format(o.id, o.user), 'tool.crib.flex@gmail.com', o.user.email
+		text_content = 'Order #{0} created by {1} is in progress, you have to wait a few minutes to get information about the status from your order'.format(o.id, o.user)
+		html_content = '<p>This is an <strong>usuario</strong> message.</p>'
+		email = EmailMultiAlternatives(subject, text_content, from_email, [to])
+		email.attach_alternative(html_content, "text/html")
 		email.send()
 		return response
 
@@ -169,10 +177,12 @@ def ordersmanagercart(request, pk):
 		toast_text = 'Order {0} Done successful'.format(order.id) 
 		response = redirect('toolcrib:ordersmanager')
 		response['Location'] += '?%s' % urllib.urlencode({'toast': toast_text})
-		subject = 'Order #{0} Done lets go to toolcrib'.format(order.id)
-		message = 'Order #{0} is Done. {1} lets go to toolcrib to get your material'.format(order.id, order.user)
-		email = EmailMessage(subject, message, to = ['c.iturriosalcaraz@gmail.com'], headers = {'Reply-To': o.user.email})
-		email.send()
+		subject, from_email, to = 'Order #{0} Done lets go to toolcrib'.format(order.id), 'tool.crib.flex@gmail.com', o.user.email
+		text_content = 'Order #{0} is Done. {1} lets go to toolcrib to get your material'.format(order.id, order.user)
+		html_content = '<p>This is an <strong>important</strong> message.</p>'
+		msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
+		msg.attach_alternative(html_content, "text/html")
+		msg.send()
 		return response
 
 	return render(request, 'ordersmanagercart.html', {'order': order})
@@ -191,10 +201,12 @@ def orderssupervisorcart(request, pk):
 		toast_text = 'Order {0} approved successful'.format(order.id) 
 		response = redirect('toolcrib:orderssupervisor')
 		response['Location'] += '?%s' % urllib.urlencode({'toast': toast_text})
-		subject = 'Order #{0} approved by {1}'.format(order.id, order.supervisor)
-		message = 'Order #{0} approved by {1} is in progress'.format(o.id, o.supervisor)
-		email = EmailMessage(subject, message, to = ['c.iturriosalcaraz@gmail.com'], headers = {'Reply-To': o.user.email})
-		email.send()
+		subject, from_email, to = 'Order #{0} approved by {1}'.format(order.id, order.supervisor), 'tool.crib.flex@gmail.com', 'tool.crib.flex@gmail.com'
+		text_content ='Order #{0} approved by {1} is in progress'.format(order.id, order.supervisor)
+		html_content = '<p>This is an <strong>important</strong> message.</p>'
+		msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
+		msg.attach_alternative(html_content, "text/html")
+		msg.send()
 		return response
 
 	return render(request, 'orderssupervisorcart.html', {'order': order})
@@ -207,10 +219,12 @@ def orderCanceled(request, pk):
 	if request.method == "POST":
 		order.status = '3'
 		order.save()
-		subject = 'Order #{0} Canceled'.format(order.id)
-		message = 'Order #{0} was Canceled. Comments: {1}'.format(order.id, order.comments)
-		email = EmailMessage(subject, message, to = ['c.iturriosalcaraz@gmail.com'], headers = {'Reply-To': o.user.email})
-		email.send()
+		subject, from_email, to = 'Order #{0} Canceled'.format(order.id), 'tool.crib.flex@gmail.com', order.user.email
+		text_content = 'Order #{0} was Canceled. Comments: {1}'.format(order.id, order.comments)
+		html_content = '<p>This is an <strong>important</strong> message.</p>'
+		msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
+		msg.attach_alternative(html_content, "text/html")
+		msg.send()
 		return redirect('toolcrib:orderssupervisor')
 	return render(request, 'orderCanceled.html', {'order':order})
 
