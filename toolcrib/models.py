@@ -1,16 +1,24 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+from os import path
 
 from django.db import models
-
 from django.contrib.auth.models import User
+
+
+
+def unique_file_path(instance, filename):	
+    base, ext = path.splitext(filename)
+    newname = "%s%s" % (instance.num_part, ext)
+    return path.join('parts_img', newname)
+
 
 # Create your models here.
 class Part(models.Model):
 	num_part = models.CharField(max_length=70, unique=True, null=False, blank=False)
 	description = models.CharField(max_length=100, db_index=True, null=False, blank=False)
 	inventory_type = models.CharField(max_length=100, db_index=True)
-	image = models.ImageField(upload_to='toolcrib/static/media', null=True, blank=False)	
+	image = models.ImageField(upload_to=unique_file_path, null=True, blank=False)	
 	category = models.CharField(
 		max_length=1, blank=False, default='1', choices=(
 			('1','SUPPLY'),

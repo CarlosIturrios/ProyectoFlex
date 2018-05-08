@@ -49,7 +49,7 @@ def updateproduct(request):
 			response = redirect('toolcrib:ordersmanager')
 			toast_text = 'Tool {0} update successful'.format(part.num_part) 
 			response['Location'] += '?%s' % urllib.urlencode({'toast': toast_text})
-			return response11
+			return response
 	else:
 		form = PartForm()
 	return render(request, 'updateproduct.html', {'form': form})
