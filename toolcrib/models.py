@@ -22,7 +22,7 @@ class Part(models.Model):
 	category = models.CharField(
 		max_length=1, blank=False, default='1', choices=(
 			('1','SUPPLY'),
-			('2','EXPERT PARTS')
+			('2','SPARE PARTS')
 		)
 	)
 	clas = models.CharField(
@@ -52,9 +52,9 @@ class Order(models.Model):
 	)
 	level = models.CharField(
 		max_length = 1, blank=False, default='1', choices =(
-			('1','Not Urgent'),
-			('2','Regular'),
-			('3','Urgent'),
+			('1','Low'),
+			('2','Medium'),
+			('3','High'),
 		)
 	)
 	
@@ -69,6 +69,7 @@ class Order(models.Model):
 	)
 		
 	date_order = models.DateTimeField(null=False, blank=False, auto_now_add=True)
+	date_approved = models.DateTimeField(null=True, blank=True)
 	date_done = models.DateTimeField(null=True, blank=True)
 
 	def __str__(self):

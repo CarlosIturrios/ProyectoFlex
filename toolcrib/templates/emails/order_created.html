@@ -149,7 +149,7 @@
                                 <td align="center" style="font-size: 32px; font-family: Helvetica, Arial, sans-serif; color: #333333; padding-top: 30px;" class="padding-copy">Your order is on its way!</td>
                             </tr>
                             <tr>
-                                <td align="left" style="padding: 20px 0 0 0; font-size: 16px; line-height: 25px; font-family: Helvetica, Arial, sans-serif; color: #666666;" class="padding-copy"> New order #{{ order.id }} created by {{ order.user.get_ful_name }} on {{ order.date_order | date:"F /d/Y H:i"  }} when status {{ order.get_status_display }} and this order is {{ order.get_level_display }}.</td>
+                                <td align="left" style="padding: 20px 0 0 0; font-size: 16px; line-height: 25px; font-family: Helvetica, Arial, sans-serif; color: #666666;" class="padding-copy"> New order #{{ order.id }} created by {{ order.user.get_full_name }} on {{ order.date_order | date:"F /d/Y H:i"  }} when status {{ order.get_status_display }} and this order is {{ order.get_level_display }}.</td>
                             </tr>
                         </table>
                     </td>
@@ -199,6 +199,7 @@
                                                         <tr>
                                                             <td align="right" style="font-family: Arial, sans-serif; color: #333333; font-size: 16px;">
                                                                 Quantity {{ part_detail.quantity }}
+                                                                Price unitary ${{ part_detail.part.price }}{{part_detail.part.get_clas_display}}
                                                             </td>
                                                         </tr>
                                                     </table>

@@ -51,7 +51,7 @@
 					<tr>
 						<td>
 							<a href="{% url 'toolcrib:orderCanceled' order.pk %}" class="btn btn-danger">
-								<i class="fa fa-angle-left"></i> Canceled
+								<i class="fa fa-angle-left"></i> Reject
 							</a>
 						</td>
 					<form action="." method="post">
@@ -59,9 +59,9 @@
 						<td>							
 							<div class="">
 								<select class="input" style="width: 120px;" name="level">
-										<option value="1" {% if order.level == '1' %}selected{% endif %}>Not Urgent</option>
-										<option value="2" {% if order.level == '2' %}selected{% endif %}>Regular</option>
-										<option value="3" {% if order.level == '3' %}selected{% endif %}>Urgent</option>
+										<option value="1" {% if order.level == '1' %}selected{% endif %}>Low</option>
+										<option value="2" {% if order.level == '2' %}selected{% endif %}>medium</option>
+										<option value="3" {% if order.level == '3' %}selected{% endif %}>Hard</option>
 								</select>
 								<input class="form-control" type="text" name="comments" style="width: 250px;" placeholder="Comments" >
 							</div>

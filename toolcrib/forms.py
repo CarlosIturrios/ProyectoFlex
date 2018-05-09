@@ -13,7 +13,7 @@ class PartForm(forms.Form):
 	category = forms.ChoiceField(
 		required=True, choices=(
 			('1','SUPPLY'),
-			('2','EXPERT PARTS')
+			('2','SPARE PARTS')
 		)
 	)
 

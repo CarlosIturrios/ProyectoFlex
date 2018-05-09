@@ -58,13 +58,13 @@
 							<div class="pull-right">
 								<select class="input" style="width: 150px" name="supervisor" required>
 									{% for supervisor in supervisors %}
-									<option value="{{supervisor.id}}">{{supervisor.first_name}} {{supervisor.last_name}}</option>
+									<option value="{{supervisor.id}}">{{ supervisor.get_full_name }}</option>
 									{% endfor %}
 								</select>					
 								<select class="input" style="width: 120px" name="level" required>
-										<option value="1">Not Urgent</option>
-										<option value="2">Regular</option>
-										<option value="3">Urgent</option>
+										<option value="1">Low</option>
+										<option value="2">Medium</option>
+										<option value="3">High</option>
 								</select>
 							</div>
 						</td>

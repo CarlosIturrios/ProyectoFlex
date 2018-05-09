@@ -12,6 +12,7 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.models import User, Group
 from django.conf import settings
 
+from datetime import datetime
 from .models import Part, Order, OrderDetail
 from .forms import PartForm, UserForm
 
@@ -25,14 +26,14 @@ def principal(request):
 @permission_required('toolcrib.add_part')
 def ordersmanager(request):	
 	# Order.status (2=approved)
-	orders = Order.objects.filter(status='2')
+	orders = Order.objects.filter(status='2').order_by('level').reverse()
 	return render(request, 'ordersmanager.html', {'orders':orders})
 
 
 @login_required()
 def orderssupervisor(request):
 	# Order.status (1=Pennding)
-	orders = Order.objects.filter(status='1', supervisor=request.user)
+	orders = Order.objects.filter(status='1', supervisor=request.user).order_by('level').reverse()
 	return render(request, 'orderssupervisor.html', {'orders':orders})
 
 
@@ -46,7 +47,7 @@ def updateproduct(request):
 			part.category = form.cleaned_data['category']
 			part.image = form.cleaned_data['image']
 			part.save()
-			response = redirect('toolcrib:ordersmanager')
+			response = redirect('toolcrib:updateproduct')
 			toast_text = 'Tool {0} update successful'.format(part.num_part) 
 			response['Location'] += '?%s' % urllib.urlencode({'toast': toast_text})
 			return response
@@ -81,10 +82,10 @@ def updateuser(request):
 def parts(request):
 	if request.method == "POST":
 		id_part = request.POST.get('id_part', None)
-		cant = request.POST.get('cant', 1)
+		cant = request.POST.get('cant', None)
 		
 		if 'cart' not in request.session:
-			request.session['cart'] = [{'id_part': id_part, 'cant': 1}]
+			request.session['cart'] = [{'id_part': id_part, 'cant': cant}]
 		else:
 			cart = request.session['cart']
 			cart.append({'id_part': id_part, 'cant': cant})
@@ -105,7 +106,7 @@ def parts(request):
 		category = '0'
 
 	if q != None and q != '':
-		parts_list = parts_list.filter(description__contains=q.strip())
+		parts_list = parts_list.filter(description__contains=q.strip()) | parts_list.filter(num_part__contains=q.strip())
 	else:
 		q = ''
 
@@ -148,8 +149,8 @@ def shopingcart(request):
 			)
 
 		del request.session['cart']
-		
-
+		supervisor_email = User.objects.get(id=supervisor)
+		print(supervisor_email)
 		subject = 'ToolCrib: New order #{0} created by {1}'.format(o.id, o.user.get_full_name())
 		html_content = get_template('emails/order_created.html').render({'order': o})
 
@@ -157,7 +158,7 @@ def shopingcart(request):
 			subject=subject,
 			body=html_content,
 			from_email=settings.DEFAULT_FROM_EMAIL,
-			to=[o.supervisor.email,],
+			to=[supervisor_email.email],
 			cc=[o.user.email,],
 		)
 		msg.content_subtype = "html"
@@ -177,6 +178,7 @@ def ordersmanagercart(request, pk):
 		comments = request.POST.get('comments', None)
 		order.status = '4'
 		order.comments = comments
+		order.date_done = datetime.now()
 		order.save()
 		toast_text = 'Order {0} Done successful'.format(order.id) 
 		response = redirect('toolcrib:ordersmanager')
@@ -209,6 +211,7 @@ def orderssupervisorcart(request, pk):
 		order.level = level
 		order.status = '2'
 		order.comments = comments
+		order.date_approved = datetime.now()
 		order.save()
 		toast_text = 'Order {0} approved successful'.format(order.id) 
 		response = redirect('toolcrib:orderssupervisor')
@@ -237,6 +240,7 @@ def orderCanceled(request, pk):
 	order = get_object_or_404(Order, pk=pk)
 	if request.method == "POST":
 		order.status = '3'
+		order.date_approved = datetime.now()
 		order.save()
 		
 		subject = 'ToolCrib: Order #{0} was Canceled'.format(order.id)
