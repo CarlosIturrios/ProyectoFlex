@@ -12,17 +12,31 @@
 </div><br>
 <!-- /BREADCRUMB -->
 
-<div class="row">								
-	<div id="main" class="col-md-12 text-center">
-		<a class="btn btn-primary" href="#">Orders</a>
-		&nbsp;
-		<a class="btn btn-danger" href="#">Parts</a>
-		&nbsp;
-		<a class="btn btn-default" href="#">Update User</a>
-		&nbsp;
-		<a class="btn btn-warning" href="#">Update Tool</a>
+
+<div class="container">
+
+
+	<header class="jumbotron my-4">
+		<h1 class="display-3">Welcome to TOOL CRIB!</h1>
+	    <p class="lead">The Toolcrib website is a tool that will help you to facilitate, improve, optimize, manage and reduce the times in the requesicion, approval and delivery of tools.</p>
+	</header>
+
+
+	<div class="container">
+		<div class="text-center">
+			<ul class="header-top-links">
+				<li><a class="fa fa-list-ul" href="{% url 'toolcrib:parts' %}"> Parts</a></li>
+				{% if user.groups.last.name == 'Supervisor' %}
+					<li><a class="fa fa-tasks" href="{% url 'toolcrib:orderssupervisor'%}"> Orders</a></li>
+				{% elif user.groups.last.name == 'Manager'  %}
+					<li><a class="fa fa-tasks" href="{% url 'toolcrib:ordersmanager' %}"> Orders</a></li>
+					<li><a class="fa fa-users" href="{% url 'toolcrib:updateuser' %}"> Update User</a></li>
+					<li><a class="fa fa-gears" href="{% url 'toolcrib:updateproduct' %}"> Update Tool</a></li>
+					<li><a class="fa fa-bar-chart" href="{% url 'toolcrib:showorders' %}"> Orders Panel</a></li>
+			{% endif %}
+			</ul>
+		</div>
 	</div>
 </div>
-
 
 {% endblock %}

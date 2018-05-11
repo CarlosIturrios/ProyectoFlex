@@ -27,9 +27,10 @@
 			{% for order in orders %}
 			<tr>
 				<td>				
-					<a class="btn btn-primary" href="{% url 'toolcrib:ordersmanagercart' order.pk %}">{{order.id}}</a>
+					<strong>{{order.id}}</strong>
 				</td>				
-				<td>{{order.user }}</td>
+				<td>
+					<strong>{{order.user.get_full_name }}</strong>
 				<td>{{order.date_order | date:"F /d/Y H:i" }}</td>
 				<td>{{ order.order_detail_set.all.count}}</td>
 				<td><span 
@@ -40,9 +41,9 @@
 						{% else %}
 						class="label label-danger"
 					{% endif %}
-						>{{order.get_level_display}}</span></td>
-				<td><span
-				 {% if order.status == '1'%}
+						>{{order.get_level_display}}</span></td>                  
+				<td><span 
+					{% if order.status == '1'%}
 						class="label label-default"
 						{% elif order.status == '2' %}
 						class="label label-primary"

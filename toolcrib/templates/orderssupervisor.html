@@ -32,8 +32,26 @@
 				<td>{{order.user }}</td>
 				<td>{{order.date_order | date:"F /d/Y H:i" }}</td>
 				<td>{{ order.order_detail_set.all.count}}</td>
-				<td><span class="label label-success">{{order.get_level_display}}</span></td>                  
-				<td><span class="label label-warning">{{order.get_status_display}}</span></td>                  
+				<td><span 
+					{% if order.level == '1'%}
+						class="label label-success"
+						{% elif order.level == '2' %}
+						class="label label-warning"
+						{% else %}
+						class="label label-danger"
+					{% endif %}
+						>{{order.get_level_display}}</span></td>                  
+				<td><span 
+					{% if order.status == '1'%}
+						class="label label-default"
+						{% elif order.status == '2' %}
+						class="label label-primary"
+						{% elif order.status == '3' %}
+						class="label label-danger"
+						{% else %}
+						class="label label-success"
+					{% endif %}
+						>{{order.get_status_display}}</span></td>                  
 			</tr>
 		</tbody>
 		{% empty %}

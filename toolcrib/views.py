@@ -31,6 +31,7 @@ def ordersmanager(request):
 
 
 @login_required()
+@permission_required('toolcrib.change_order')
 def orderssupervisor(request):
 	# Order.status (1=Pennding)
 	orders = Order.objects.filter(status='1', supervisor=request.user).order_by('level').reverse()
@@ -183,7 +184,7 @@ def ordersmanagercart(request, pk):
 		toast_text = 'Order {0} Done successful'.format(order.id) 
 		response = redirect('toolcrib:ordersmanager')
 		response['Location'] += '?%s' % urllib.urlencode({'toast': toast_text})
-		
+
 		subject = 'ToolCrib: order #{0} Done lets go to toolcrib'.format(order.id)
 		html_content = get_template('emails/OrderDone.html').render({'order': order})
 
@@ -203,6 +204,7 @@ def ordersmanagercart(request, pk):
 
 
 @login_required()
+@permission_required('toolcrib.change_order')
 def orderssupervisorcart(request, pk):	
 	order = get_object_or_404(Order, pk=pk)
 	if request.method == "POST":
@@ -236,6 +238,7 @@ def orderssupervisorcart(request, pk):
 
 
 @login_required()
+@permission_required('toolcrib.change_order')
 def orderCanceled(request, pk):
 	order = get_object_or_404(Order, pk=pk)
 	if request.method == "POST":
@@ -266,3 +269,9 @@ def deleteCart(request):
 		del request.session['cart']
 		return redirect('toolcrib:parts')
 	return render(request, 'deleteCart.html')
+
+
+@login_required()
+def showorders(request):
+	orders = Order.objects.all().order_by('status')
+	return render(request,'showorders.html',{'orders':orders})
