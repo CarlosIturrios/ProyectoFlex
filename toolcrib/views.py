@@ -174,6 +174,7 @@ def shopingcart(request):
 @login_required()
 @permission_required('toolcrib.add_part')
 def ordersmanagercart(request, pk):
+	# Order.status (4=Done)
 	order = get_object_or_404(Order, pk=pk)
 	if request.method == "POST":
 		comments = request.POST.get('comments', None)
@@ -240,6 +241,7 @@ def orderssupervisorcart(request, pk):
 @login_required()
 @permission_required('toolcrib.change_order')
 def orderCanceled(request, pk):
+	# Order.status (3=Cancel)
 	order = get_object_or_404(Order, pk=pk)
 	if request.method == "POST":
 		order.status = '3'
