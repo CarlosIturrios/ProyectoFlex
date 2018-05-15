@@ -136,7 +136,7 @@ def shopingcart(request):
 		level = request.POST.get('level', None)
 		cost_center = request.POST.get('cost_center', None)
 
-		o = Order()f
+		o = Order()
 		o.level = level
 		o.cost_center = cost_center
 		o.supervisor = User(id=supervisor)
