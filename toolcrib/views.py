@@ -107,7 +107,7 @@ def parts(request):
 		category = '0'
 
 	if q != None and q != '':
-		parts_list = parts_list.filter(description__contains=q.strip()) | parts_list.filter(num_part__contains=q.strip())
+		parts_list = parts_list.filter(description__icontains=q.strip()) | parts_list.filter(num_part__icontains=q.strip())
 	else:
 		q = ''
 
@@ -136,7 +136,7 @@ def shopingcart(request):
 		level = request.POST.get('level', None)
 		cost_center = request.POST.get('cost_center', None)
 
-		o = Order()
+		o = Order()f
 		o.level = level
 		o.cost_center = cost_center
 		o.supervisor = User(id=supervisor)
