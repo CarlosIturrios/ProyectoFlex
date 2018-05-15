@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load mathfilters %}
 {% block 'main' %}
 
 <!-- /BREADCRUMB -->
@@ -7,7 +7,7 @@
 	<div class="container">
 		<ul class="breadcrumb">
 			<li><a href="{% url 'toolcrib:principal' %}">ToolCrib</a></li>
-			<li class="active">Orders</li>
+			<li class="active">DashBoard</li>
 		</ul>
 	</div>
 </div><br>
@@ -20,6 +20,7 @@
 				<th>ID</th>
 				<th>User</th>
 				<th>Date</th>
+				<th>Time to Do</th>
 				<th>N Items</th>
 				<th>Urgency</th>
 				<th>Status</th>
@@ -31,7 +32,19 @@
 				</td>				
 				<td>
 					<strong>{{order.user.get_full_name }}</strong>
-				<td>{{order.date_order | date:"F /d/Y H:i" }}</td>
+				<td>{{order.date_order | date:"F /d/Y H:i" }}
+				</td>
+				<td>
+					{% if order.status == '2' %}
+						Approved in: {{ order.date_approved|sub:order.date_order }}
+					{% elif order.status == '4' %}
+						done in: {{ order.date_done|sub:order.date_approved }}
+					{% elif order.status == '1' %}
+						is not approved.
+					{% else %}
+						Is canceled
+					{% endif %}
+				</td>
 				<td>{{ order.order_detail_set.all.count}}</td>
 				<td><span 
 					{% if order.level == '1'%}
