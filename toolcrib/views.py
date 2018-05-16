@@ -99,9 +99,10 @@ def parts(request):
 	page = request.GET.get('page', 1)
 	category = request.GET.get('category', None)	
 		
-	parts_list = Part.objects.filter(quantity__gt = 0)
-		
-	if category != None and category != '0':
+	#parts_list = Part.objects.filter(quantity__gt = 0)
+	parts_list = Part.objects.all()
+
+	if category != None: #and category != '0':
 		parts_list = parts_list.filter(category=category)
 	else:
 		category = '0'
