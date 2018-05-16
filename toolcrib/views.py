@@ -84,16 +84,22 @@ def parts(request):
 	if request.method == "POST":
 		id_part = request.POST.get('id_part', None)
 		cant = request.POST.get('cant', None)
-		
-		if 'cart' not in request.session:
-			request.session['cart'] = [{'id_part': id_part, 'cant': cant}]
+		tool = Part.objects.get(id=id_part)
+
+		if cant > tool.quantity:
+			toast_text = 'Part {0} can not be assortment.'.format(tool.description) 
+			response = redirect('toolcrib:parts')
+			response['Location'] += '?%s' % urllib.urlencode({'toast': toast_text})
+			return response
 		else:
-			cart = request.session['cart']
-			cart.append({'id_part': id_part, 'cant': cant})
-			request.session['cart'] = cart
-
-		return redirect('toolcrib:parts')
-
+			if 'cart' not in request.session:
+				request.session['cart'] = [{'id_part': id_part, 'cant': cant}]
+			else:
+				cart = request.session['cart']
+				cart.append({'id_part': id_part, 'cant': cant})
+				request.session['cart'] = cart
+			
+			return redirect('toolcrib:parts')
 
 	q = request.GET.get('q', None)
 	page = request.GET.get('page', 1)
