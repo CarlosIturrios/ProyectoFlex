@@ -86,11 +86,12 @@ def parts(request):
 		cant = request.POST.get('cant', None)
 		tool = Part.objects.get(id=id_part)
 
-		if cant > tool.quantity:
+		if int(cant) >= tool.quantity:
 			toast_text = 'Part {0} can not be assortment.'.format(tool.description) 
 			response = redirect('toolcrib:parts')
 			response['Location'] += '?%s' % urllib.urlencode({'toast': toast_text})
 			return response
+			
 		else:
 			if 'cart' not in request.session:
 				request.session['cart'] = [{'id_part': id_part, 'cant': cant}]
