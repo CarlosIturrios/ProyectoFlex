@@ -110,7 +110,7 @@ def parts(request):
 	parts_list = Part.objects.all()
 
 	if category != None: #and category != '0':
-		parts_list = parts_list.filter(category=category)
+		parts_list = parts_list.filter(inventory_type=category)
 	else:
 		category = '0'
 
