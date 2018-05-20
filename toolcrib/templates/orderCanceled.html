@@ -3,14 +3,20 @@
 {% block 'main' %}
 
 <div class="row">
-    <div class="col-sm-12 col-md-12 col-lg-12">
+    <div class="container col-sm-12 col-md-12 col-lg-12">
         <div class="alert alert-danger">
             <strong>Danger!</strong> <p>You want to cancel the order?</p>
             <div>
                 <a href="{% url 'toolcrib:orderssupervisorcart' order.pk %}" class="btn btn-success">Return</a>
             </div>
             <br>
+            <div>
             <form action="." method="post">
+                <div>
+                    <input class="form-control" type="text" name="comments" style="width: 70%;" placeholder="Comments" >
+                </div>
+            </div>
+            <br>
                 {% csrf_token %}
                 <button class="btn btn-danger" >Reject</button>
             </form>

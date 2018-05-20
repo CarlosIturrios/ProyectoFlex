@@ -252,6 +252,8 @@ def orderCanceled(request, pk):
 	# Order.status (3=Cancel)
 	order = get_object_or_404(Order, pk=pk)
 	if request.method == "POST":
+		comments = request.POST.get('comments', None)
+		order.comments = comments
 		order.status = '3'
 		order.date_approved = datetime.now()
 		order.save()
