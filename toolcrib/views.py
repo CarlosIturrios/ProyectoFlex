@@ -11,6 +11,7 @@ from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.models import User, Group
 from django.conf import settings
+from django.core import signing
 
 from datetime import datetime
 from .models import Part, Order, OrderDetail
@@ -158,10 +159,15 @@ def shopingcart(request):
 			)
 
 		del request.session['cart']
+
+		# Create Order status update Token
+		token = signing.dumps({'order_id': o.id, 'order_status': 2}) # Order status 2 is approved
+
+
 		supervisor_email = User.objects.get(id=supervisor)
 		print(supervisor_email)
 		subject = 'ToolCrib: New order #{0} created by {1}'.format(o.id, o.user.get_full_name())
-		html_content = get_template('emails/order_created.html').render({'order': o})
+		html_content = get_template('emails/order_created.html').render({'order': o, 'token': token})
 
 		msg = EmailMessage(
 			subject=subject,
@@ -287,3 +293,17 @@ def deleteCart(request):
 def showorders(request):
 	orders = Order.objects.all().order_by('status')
 	return render(request,'showorders.html',{'orders':orders})
+
+
+def update_order_status_by_email(request, token):
+	data = signing.loads(token, max_age=60 * 60 * 48)# max_age = 2 days
+
+	order_id = data['order_id']
+	order_status = data['order_status']
+
+	order = Order.objects.get(id=order_id)
+
+	order.status = order_status
+	order.save()
+
+	return render(request, 'update_order_status_by_email.html', {'order':order })
