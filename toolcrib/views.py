@@ -110,7 +110,7 @@ def parts(request):
 	#parts_list = Part.objects.filter(quantity__gt = 0)
 	parts_list = Part.objects.all()
 
-	if category != None: #and category != '0':
+	if category != None and category != '0':
 		parts_list = parts_list.filter(inventory_type=category)
 	else:
 		category = '0'
@@ -174,7 +174,6 @@ def shopingcart(request):
 			body=html_content,
 			from_email=settings.DEFAULT_FROM_EMAIL,
 			to=[supervisor_email.email],
-			cc=[o.user.email,],
 		)
 		msg.content_subtype = "html"
 		msg.send(fail_silently= not settings.DEBUG)
