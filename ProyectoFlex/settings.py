@@ -26,8 +26,8 @@ SECRET_KEY = 'h97)hx7(5b$78sd$)4s!)@10u=eoi_2%3=@weevcv00oslbyut'
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    '40.74.252.191',
     '127.0.0.1',
+    'localhost',
 ]
 
 
@@ -79,24 +79,12 @@ WSGI_APPLICATION = 'ProyectoFlex.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
-if DEBUG:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
             'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-        }
     }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME': 'toolcrib',
-            'USER': 'toolcrib',
-            'PASSWORD':'##toolcrib##',
-            'HOST': '127.0.0.1',
-        }
-    }
-
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
@@ -135,31 +123,18 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'toolcrib/static'),
-]
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+#STATICFILES_DIRS = [
+#    os.path.join(BASE_DIR, 'toolcrib/static'),
+#]
 
 MEDIA_URL = '/media/'
-
-if DEBUG:
-    MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-else:
-    MEDIA_ROOT = '/usr/share/nginx/toolcrib/media/'
-    STATIC_ROOT = '/usr/share/nginx/toolcrib/static/'
-
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 LOGIN_URL = '/toolcrib/login/'
 LOGIN_REDIRECT_URL = '/toolcrib/'
 
-EMAIL_USE_TLS = True
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'tool.crib.flex@gmail.com'
-EMAIL_HOST_PASSWORD = 'Flextronics2018'
-EMAIL_PORT = 587
-DEFAULT_FROM_EMAIL = 'ToolCrib <tool.crib.flex@gmail.com>'
-
-
-ADMINS = (
-    ('Carlos Iturrios', 'c.iturriosalcaraz@gmail.com'),
-)
+try:
+    from local_settings import *
+except ImportError:
+    pass
